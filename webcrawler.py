@@ -109,6 +109,22 @@ def crawl_institution(url, to_visit, num):
     return visited  # returns a list of urls that satisfy the named conditions
 
 
+
+
+
+
+# Add this at the beginning of your main script or before calling write_institution_urls
+institution_name = input("Enter the name of the institution (without .edu): ").strip()
+start_url = f"http://{institution_name}.edu"  # Assuming the institution uses http, not https
+
+# Then, you can use start_url as the starting point for your web crawler
+
+
+
+
+
+
+
 def write_institution_urls(start_url, to_visit, max, output_name):
     """
     checks through the given url, identifies the urls that fit the conditions above, prints the urls
