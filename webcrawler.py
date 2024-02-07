@@ -11,13 +11,13 @@ search will utilize to_visit structure to keep track of web pages it has found
 """
 
 
-def is_valid_pomona_url(url):
+def is_valid_institution_url(url): 
     """
-    checks if url is pomona's (pomona.edu)
+    checks if url is schoool (.edu)
     :param url: (str) representing pomona url
-    :return: (bool) true if website is Pomona url
+    :return: (bool) true if website is institution url
     """
-    search_line = "pomona.edu"  # string being searched for
+    search_line = ".edu"  # string being searched for (changed institution.edu to .edu)
     for line in url.split():  # makes the line into a list before being iterated through
         return search_line in line  # if search_line is found then it returns true
 
@@ -52,7 +52,7 @@ def get_all_urls(url):
             begin_index = begin_index + 6  # the search index is reassigned for the remaining urls after the first
             end_index = page_texts.find('"' or "'", begin_index + 1)  # checks for either double or single quotes
             found_url = page_texts[begin_index:end_index]  # asigns the found url from the begin_index to end_index
-            if is_full_url(found_url):  # Checks if the found url starts with http and is valid pomona url
+            if is_full_url(found_url):  # Checks if the found url starts with http and is valid institution url
                 valid_urls.append(found_url)  # adds the url into a list
 
             begin_index = page_texts.find(search_line, end_index)
@@ -63,21 +63,21 @@ def get_all_urls(url):
     return valid_urls  # returns the urls found as the while loop is left
 
 
-def filter_pomona_urls(url):
+def filter_institution_urls(url):
     """
-    checks for pomona urls only
+    checks for .edu urls only
     :param url: (lst) a list containing urls
-    :return: (lst) containing pomona urls
+    :return: (lst) containing institution urls
     """
 
-    new_url = []  # empty list to append pomona urls
+    new_url = []  # empty list to append urls
     for link in url:  # iterates through the list of urls
-        if is_valid_pomona_url(link):  # checks if the url belongs to pomona
+        if is_valid_institution_url(link):  # checks if the url belongs to institution
             new_url.append(link)  # appends the url that fits the requirements
     return new_url  # returns the url list that fit the requirement
 
 
-def crawl_pomona(url, to_visit, num):
+def crawl_institution(url, to_visit, num):
     """
     uses Stack() or Queue() classes to iterate through the links, identify valid links and returns a list of the valid
     links
@@ -90,7 +90,7 @@ def crawl_pomona(url, to_visit, num):
     my_set = set()  # empty set
     sourced_urls = get_all_urls(url)  # creates a list of all urls
     for link in sourced_urls:  # iterates through the list of urls created
-        if is_valid_pomona_url(link):  # checks if the url belongs to pomona
+        if is_valid_institution_url(link):  # checks if the url belongs to institution
             to_visit.add(link)  # appends the link into the to_visit list which is initially empty for the BFS or DFS
 
     while not to_visit.is_empty() and len(visited) < num:  # checks that as long as the to_visit list is occupied
@@ -100,8 +100,8 @@ def crawl_pomona(url, to_visit, num):
             my_set.add(visited_url)  # if not, it gets added to the set
             visited.append(visited_url)  # the same link is appended to the list called visited,to keep track
             print("crawling" + visited_url)
-            pomona_links = filter_pomona_urls(get_all_urls(visited_url))  # only gets pomona related urls in a list
-            for link in pomona_links:  # iterates through the list of urls
+            institution_links = filter_institution_urls(get_all_urls(visited_url))  # only gets institution related urls in a list
+            for link in institution_links:  # iterates through the list of urls
                 to_visit.add(link)  # adds the links to the to_visit list
 
             time.sleep(0.1)  # minimizes time it takes to visit a single url
@@ -109,7 +109,7 @@ def crawl_pomona(url, to_visit, num):
     return visited  # returns a list of urls that satisfy the named conditions
 
 
-def write_pomona_urls(start_url, to_visit, max, output_name):
+def write_institution_urls(start_url, to_visit, max, output_name):
     """
     checks through the given url, identifies the urls that fit the conditions above, prints the urls
     :param start_url: (str) the url to start with
@@ -119,7 +119,7 @@ def write_pomona_urls(start_url, to_visit, max, output_name):
     :return: (str) the urls collected
     """
     output_file = open(output_name, "w")  # opens the file
-    link_list = crawl_pomona(start_url, to_visit, max)
+    link_list = crawl_institution(start_url, to_visit, max)
 
     for i in link_list:  # iterates through the list of urls
         output_file.write(str(i) + "\n")  # writes the urls in the output file
